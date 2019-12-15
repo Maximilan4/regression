@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from src.analyze import Regression
+from regression.analyze import Regression
 
 
 class RegressionPlot:

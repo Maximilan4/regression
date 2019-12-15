@@ -1,8 +1,8 @@
 import os
 import numpy as np
-from src.analyze import RegressionAnalyzer, Regression
-from src.scores import RegressionScore
-from src.visualization import RegressionPlot
+from regression.analyze import RegressionAnalyzer, Regression
+from regression.scores import RegressionScore
+from regression.visualization import RegressionPlot
 
 class Application:
 

@@ -1,5 +1,5 @@
 import numpy as np
-from src.analyze import Regression
+from regression.analyze import Regression
 from numpy import ndarray
 from pandas import DataFrame, Series, concat
 from sklearn.metrics import r2_score, max_error
