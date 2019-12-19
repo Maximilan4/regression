@@ -9,5 +9,5 @@ class RegressionPlot:
 
     def create(self):
         plt.scatter(self.regression.params_df, self.regression.result_df)
-        plt.plot(self.regression.params_df, self.regression.last_predicted, color='red')
+        plt.plot(self.regression.params_df, self.regression.predicted, color='red')
         plt.show()

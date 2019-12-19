@@ -1,10 +1,7 @@
-import numpy as np
-from pandas import read_csv, DataFrame, Series, concat
+from pandas import read_csv, DataFrame
 from sklearn.linear_model import LinearRegression
 from numpy import ndarray
-from sklearn.metrics import r2_score, max_error
-from sklearn.feature_selection import f_regression
-# from skfeature.function.similarity_based import fisher_score
+from sklearn.metrics import mean_absolute_error
 
 
 class Regression:
@@ -12,7 +9,13 @@ class Regression:
         self.model = LinearRegression()
         self.result_df = self._build_result_df(data_frame)
         self.params_df = self._build_params_df(data_frame, drop_params)
-        self.last_predicted = None
+        self.fit()
+        self.predicted = self.predict()
+        self.deviation = self.calculate_deviation(self.result_df.values.ravel(), self.predicted)
+
+
+    def calculate_deviation(self, orig_y, predicted_y):
+        return mean_absolute_error(orig_y, predicted_y)
 
     @staticmethod
     def _build_params_df(data_frame: DataFrame, drop_params: list = None):
@@ -39,7 +42,6 @@ class Regression:
         else:
             values = self.model.predict(self.params_df)
 
-        self.last_predicted = values
         return values
 
 
@@ -68,12 +70,7 @@ class RegressionAnalyzer:
         if len(drop_params) > 0:
             print("Параметры {} будут исключены из модели".format(','.join(drop_params)))
 
-        regression = Regression(self.data_frame, drop_params)
-        regression.fit()
-        predicted_values = regression.predict()
-        print('Предполагаемые y: {}'.format(predicted_values))
-
-        return regression
+        return Regression(self.data_frame, drop_params)
 
     def read_drop_params(self) -> list:
         params = [x for x in self.data_frame.columns.values if x != 'y']
