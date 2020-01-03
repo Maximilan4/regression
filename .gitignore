@@ -119,4 +119,5 @@ regression.iml
 .idea
 *.csv
 !sources/example.csv
+*.sav
 
