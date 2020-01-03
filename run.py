@@ -3,10 +3,9 @@ import sys
 
 args = sys.argv[1:]
 if len(args) != 0 and args[0] == 'serve':
-    from api.application import Application
+    from api.application import app
     import api.config
-    app = Application(api.config)
-    app.run()
+    app.run(api.config.FLASK_HOST, api.config.FLASK_PORT, api.config.FLASK_DEBUG)
 else:
     from regression.application import Application
     MAIN_PATH = os.getcwd()
