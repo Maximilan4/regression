@@ -4,7 +4,7 @@ import numpy as np
 from flask import Flask
 from flask import request
 from flask import make_response
-from .errors import NotValidRequest
+from .errors import NotValidRequest, ModelLoadError
 from regression.analyze import Regression, Correlation
 from regression.serializers import RegressionDictSerializer
 from pandas import DataFrame
@@ -33,7 +33,7 @@ def fit():
 @app.route('/regression/predict', methods=['POST'])
 def predict():
     if not os.path.isfile(MODEL_SAVE_FILE):
-        prediction = []
+        raise ModelLoadError()
     else:
         regression = pickle.load(open(MODEL_SAVE_FILE, 'rb'))
         params = regression.params_names.tolist()
@@ -44,12 +44,12 @@ def predict():
                 continue
             raise NotValidRequest("Missing {} param for prediction".format(param))
 
-        prediction = regression.predict(np.array([list(request_data.values())])).tolist()
+        prediction = regression.predict(np.array([list(request_data.values())])).tolist().pop()
 
     return make_response({
         'error': False,
         'data': {
-            'prediction': prediction[0]
+            'prediction': prediction
         }
     })
 
@@ -57,7 +57,7 @@ def predict():
 @app.route('/regression/model/params')
 def get_model_params():
     if not os.path.isfile(MODEL_SAVE_FILE):
-        params = []
+        raise ModelLoadError()
     else:
         regression = pickle.load(open(MODEL_SAVE_FILE, 'rb'))
         params = regression.params_names.tolist()
@@ -93,6 +93,7 @@ def validate_request(request_data: dict):
 
 
 @app.errorhandler(NotValidRequest)
+@app.errorhandler(ModelLoadError)
 def error_handler(error):
     return make_response({
         "error": True,

@@ -15,3 +15,11 @@ class NotValidRequest(ApiException):
     def __init__(self, message: str):
         message = "Request is not valid: {}".format(message)
         super().__init__(message)
+
+
+class ModelLoadError(ApiException):
+
+    def __init__(self):
+        message = "Can`t load model, run fit method"
+        super().__init__(message)
+
