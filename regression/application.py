@@ -1,6 +1,8 @@
 import os
-from src.analyze import RegressionAnalyzer, Regression
+
+from .analyze import RegressionAnalyzer, Regression
 from .serializers import RegressionStdOutSerializer
+
 
 class Application:
 

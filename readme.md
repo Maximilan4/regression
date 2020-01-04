@@ -15,7 +15,8 @@ pip3 -r requirements.txt # устанавливаем зависимости
 
 ## Запуск 
 ```bash
-python3 run.py
+python3 run.py # - запуск консольного приложения
+python3 run.py serve - запуск http сервера
 ```
 
 ## Запуск через Docker
