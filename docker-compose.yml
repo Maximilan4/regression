@@ -1,13 +1,23 @@
 version: '3'
 
 services:
+  web:
+    image: nginx:1.17.6
+    network_mode: bridge
+    links:
+      - regression
+    depends_on:
+      - regression
+    ports:
+      - "8080:80"
+    volumes:
+      - ./deploy/default.conf:/etc/nginx/conf.d/default.conf
   regression:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - FLASK_PORT=8080
+      - FLASK_PORT=9000
       - FLASK_HOST=0.0.0.0
-    ports:
-      - "8080:8080"
+    network_mode: bridge
     entrypoint: ["python", "run.py", "serve"]
