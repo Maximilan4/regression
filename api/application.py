@@ -4,6 +4,8 @@ import numpy as np
 from flask import Flask
 from flask import request
 from flask import make_response
+from werkzeug.exceptions import InternalServerError
+
 from .errors import NotValidRequest, ModelLoadError
 from regression.analyze import Regression, Correlation
 from regression.serializers import RegressionDictSerializer
@@ -80,6 +82,11 @@ def validate_request(request_data: dict):
         raise NotValidRequest("key {} is required".format(key))
 
     columns_len = len(request_data['columns'])
+    rows_count = len(request_data['rows'])
+
+    if (columns_len + 1) > rows_count:
+        raise NotValidRequest("Rows count must be min {}, got {}".format(columns_len + 1, rows_count))
+
     for column in list_columns:
         if isinstance(request_data[column], list):
             continue
@@ -101,3 +108,14 @@ def error_handler(error):
             "message": error.message
         }
     }), 400
+
+
+@app.errorhandler(Exception)
+def handle_500(error):
+    return make_response({
+        "error": True,
+        "data": {
+            "message": str(error)
+        }
+    })
+
