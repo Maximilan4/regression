@@ -20,7 +20,7 @@ class Correlation:
         fields = []
         params = []
         for i in self.instance:
-            for j in self.instance.index[self.instance[i] > self.relevance_min_value]:
+            for j in self.instance.index[abs(self.instance[i]) > self.relevance_min_value]:
                 if i != j and j not in fields and i not in fields:
                     fields.append(j)
                     params.append((i, j, self.instance[i][self.instance.index==j].values[0]))

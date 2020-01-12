@@ -183,7 +183,7 @@ class RegressionStdOutSerializer(RegressionSerializer):
         if len(correlation.correlated_params) != 0:
             print('Между собой коррелируют параметры:')
             for params in correlation.correlated_params:
-                print("%s-->%s: r^2=%f".format(*params))
+                print("{}-->{}: r^2={}".format(*params))
 
     def print_predicted_y(self):
         print("Прогнозируемые значения y от текущей выборки параметров x: {}".format(self.regression.predicted))
